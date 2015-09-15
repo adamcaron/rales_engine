@@ -36,4 +36,18 @@ RSpec.describe Api::V1::ItemsController, type: :controller do
     json_item = JSON.parse(response.body, symbolize_names: true)
     expect(json_item[:id]).to eq(item.id)
   end
+
+  scenario "#find_all" do
+    merchant = Merchant.create(name: "Alfonse Capone")
+    item1 = Item.create(name: "Thing", description: "Awesome", unit_price: "4500.00", merchant_id: merchant.id)
+    item2 = Item.create(name: "Thing", description: "Awesome", unit_price: "4500.00", merchant_id: merchant.id)
+    item3 = Item.create(name: "Thing", description: "Awesome", unit_price: "100000.00", merchant_id: merchant.id)
+
+    get :find_all, format: :json, unit_price: "4500.00"
+    json_items = JSON.parse(response.body, symbolize_names: true)
+    expect(response).to have_http_status(:success)
+    expect(json_items.count).to eq(2)
+    expect(json_items.first[:unit_price]).to eq("4500.00")
+    expect(json_items.last[:unit_price]).to eq("4500.00")
+  end
 end
