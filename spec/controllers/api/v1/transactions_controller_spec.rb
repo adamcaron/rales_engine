@@ -35,4 +35,20 @@ RSpec.describe Api::V1::TransactionsController, type: :controller do
     json_transaction = JSON.parse(response.body, symbolize_names: true)
     expect(json_transaction[:id]).to eq(transaction.id)
   end
+
+  scenario "#find_all" do
+    customer     = Customer.create(first_name: "Joe", last_name: "Shmo")
+    merchant     = Merchant.create(name: "Alfonse Capone")
+    invoice      = Invoice.create(status: "shipped", customer_id: customer.id, merchant_id: merchant.id)
+    transaction1 = Transaction.create(credit_card_number: "4654405418249632", result: "success", invoice_id: invoice.id)
+    transaction2 = Transaction.create(credit_card_number: "4654405418249632", result: "success", invoice_id: invoice.id)
+    transaction3 = Transaction.create(credit_card_number: "4654405418249632", result: "failed", invoice_id: invoice.id)
+
+    get :find_all, format: :json, result: "success"
+    json_transactions = JSON.parse(response.body, symbolize_names: true)
+    expect(response).to have_http_status(:success)
+    expect(json_transactions.count).to eq(2)
+    expect(json_transactions.first[:result]).to eq("success")
+    expect(json_transactions.last[:result]).to eq("success")
+  end
 end

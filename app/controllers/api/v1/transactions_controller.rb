@@ -10,13 +10,7 @@ class Api::V1::TransactionsController < ApplicationController
   end
 
   def find_all
-    if params.include?("credit_card_number")
-      respond_with Transaction.where(credit_card_number: params[:credit_card_number])
-    elsif params.where?("result")
-      respond_with Transaction.where(result: params[:result])
-    else params.include?("invoice_id")
-      respond_with Transaction.where(invoice_id: params[:invoice_id])
-    end
+    respond_with Transaction.where(transaction_params)
   end
 
   private
