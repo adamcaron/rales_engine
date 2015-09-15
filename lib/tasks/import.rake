@@ -1,5 +1,4 @@
 require 'csv'
-require 'pry'
 
 desc "Import 'Rales Engine' data from csv file"
 task :import => [:environment] do
