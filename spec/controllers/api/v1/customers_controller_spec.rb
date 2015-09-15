@@ -42,4 +42,23 @@ RSpec.describe Api::V1::CustomersController, type: :controller do
     expect(json_customers.first[:last_name]).to eq("Personson")
     expect(json_customers.last[:last_name]).to eq("Personson")
   end
+
+  scenario "#random" do
+    900.times { Customer.create(first_name: "John", last_name: "Doe") }
+
+    get :random, format: :json
+    json_customer1 = JSON.parse(response.body, symbolize_names: true)
+    expect(response).to have_http_status(:success)
+
+    get :random, format: :json
+    json_customer2 = JSON.parse(response.body, symbolize_names: true)
+    expect(response).to have_http_status(:success)
+    expect(json_customer2[:id]).to_not eq(json_customer1[:id])
+
+    get :random, format: :json
+    json_customer3 = JSON.parse(response.body, symbolize_names: true)
+    expect(response).to have_http_status(:success)
+    expect(json_customer3[:id]).to_not eq(json_customer1[:id])
+    expect(json_customer3[:id]).to_not eq(json_customer2[:id])
+  end
 end
