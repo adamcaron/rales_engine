@@ -26,4 +26,20 @@ RSpec.describe Api::V1::CustomersController, type: :controller do
     expect(response).to have_http_status(:success)
     expect(json_customer[:id]).to eq(customer.id)
   end
+
+  scenario "#find_all" do
+    customer1 = Customer.create(first_name: "John", last_name: "Doe")
+    customer2 = Customer.create(first_name: "Jane", last_name: "Johnson")
+    customer3 = Customer.create(first_name: "Ruth", last_name: "Personson")
+    customer4 = Customer.create(first_name: "Tony", last_name: "Personson")
+
+    get :find_all, format: :json, last_name: "Personson"
+    json_customers = JSON.parse(response.body, symbolize_names: true)
+    expect(response).to have_http_status(:success)
+    expect(json_customers.count).to eq(2)
+    expect(json_customers.first[:id]).to eq(customer3.id)
+    expect(json_customers.last[:id]).to eq(customer4.id)
+    expect(json_customers.first[:last_name]).to eq("Personson")
+    expect(json_customers.last[:last_name]).to eq("Personson")
+  end
 end
