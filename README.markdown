@@ -8,3 +8,15 @@
  - Use Ruby and ActiveRecord to perform complicated business intelligence.
 
 [Technical Expectations](https://github.com/turingschool/lesson_plans/blob/master/ruby_03-professional_rails_applications/rales_engine.md#-technical-expectations)
+
+# Setup
+
+run `git clone git@github.com:adamcaron/rales_engine.git`
+
+To setup and populate the database:
+run `rake db:create`
+run `rake db:migrate`
+run `rake import`
+
+To run the test suite:
+run `rspec`
