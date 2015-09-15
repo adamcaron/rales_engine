@@ -50,4 +50,24 @@ RSpec.describe Api::V1::ItemsController, type: :controller do
     expect(json_items.first[:unit_price]).to eq("4500.00")
     expect(json_items.last[:unit_price]).to eq("4500.00")
   end
+
+  scenario "#random" do
+    merchant = Merchant.create(name: "Alfonse Capone")
+    900.times { Item.create(name: "Thing", description: "Awesome", unit_price: "4500.00", merchant_id: merchant.id) }
+
+    get :random, format: :json
+    json_item1 = JSON.parse(response.body, symbolize_names: true)
+    expect(response).to have_http_status(:success)
+
+    get :random, format: :json
+    json_item2 = JSON.parse(response.body, symbolize_names: true)
+    expect(response).to have_http_status(:success)
+    expect(json_item2[:id]).to_not eq(json_item1[:id])
+
+    get :random, format: :json
+    json_item3 = JSON.parse(response.body, symbolize_names: true)
+    expect(response).to have_http_status(:success)
+    expect(json_item3[:id]).to_not eq(json_item1[:id])
+    expect(json_item3[:id]).to_not eq(json_item2[:id])
+  end
 end

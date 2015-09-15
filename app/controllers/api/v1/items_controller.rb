@@ -13,6 +13,11 @@ class Api::V1::ItemsController < ApplicationController
     respond_with Item.where(item_params)
   end
 
+  def random
+    item = Item.all.sample
+    respond_with Item.find_by(id: item.id)
+  end
+
   private
 
   def item_params
