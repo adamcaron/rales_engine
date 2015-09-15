@@ -9,7 +9,7 @@ Use Rails + ActiveRecord: build a JSON API to expose the SalesEngine data schema
 
 [Technical Expectations](https://github.com/turingschool/lesson_plans/blob/master/ruby_03-professional_rails_applications/rales_engine.md#-technical-expectations)
 
-# Setup
+### Setup
 
 run `git clone git@github.com:adamcaron/rales_engine.git`
 
