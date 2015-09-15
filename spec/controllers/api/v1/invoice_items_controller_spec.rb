@@ -42,4 +42,21 @@ RSpec.describe Api::V1::InvoiceItemsController, type: :controller do
     json_invoice_item = JSON.parse(response.body, symbolize_names: true)
     expect(json_invoice_item[:id]).to eq(invoice_item.id)
   end
+
+  scenario "#find_all" do
+    customer      = Customer.create(first_name: "Joe", last_name: "Shmo")
+    merchant      = Merchant.create(name: "Alfonse Capone")
+    invoice       = Invoice.create(status: "shipped", customer_id: customer.id, merchant_id: merchant.id)
+    item          = Item.create(name: "Thing", description: "Awesome", unit_price: "100000.00", merchant_id: merchant.id)
+    invoice_item1 = InvoiceItem.create(quantity: 17, unit_price: "100000.00", item_id: item.id, invoice_id: invoice.id)
+    invoice_item2 = InvoiceItem.create(quantity: 17, unit_price: "100000.00", item_id: item.id, invoice_id: invoice.id)
+    invoice_item3 = InvoiceItem.create(quantity: 2, unit_price: "100000.00", item_id: item.id, invoice_id: invoice.id)
+
+    get :find_all, format: :json, quantity: 17
+    json_invoice_items = JSON.parse(response.body, symbolize_names: true)
+    expect(response).to have_http_status(:success)
+    expect(json_invoice_items.count).to eq(2)
+    expect(json_invoice_items.first[:quantity]).to eq(17)
+    expect(json_invoice_items.last[:quantity]).to eq(17)
+  end
 end
