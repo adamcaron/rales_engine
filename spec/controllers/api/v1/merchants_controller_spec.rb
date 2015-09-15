@@ -20,4 +20,17 @@ RSpec.describe Api::V1::MerchantsController, type: :controller do
     expect(response).to have_http_status(:success)
     expect(json_merchant[:name]).to eq("Lemony Snicket")
   end
+
+  scenario "#find_all" do
+    merchant1 = Merchant.create(name: "Lemony Snicket")
+    merchant2 = Merchant.create(name: "Lemony Snicket")
+    merchant3 = Merchant.create(name: "Jiminy Cricket")
+
+    get :find_all, format: :json, name: "Lemony Snicket"
+    json_merchants = JSON.parse(response.body, symbolize_names: true)
+    expect(response).to have_http_status(:success)
+    expect(json_merchants.count).to eq(2)
+    expect(json_merchants.first[:name]).to eq("Lemony Snicket")
+    expect(json_merchants.last[:name]).to eq("Lemony Snicket")
+  end
 end

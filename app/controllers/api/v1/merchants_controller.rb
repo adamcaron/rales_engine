@@ -10,7 +10,7 @@ class Api::V1::MerchantsController < ApplicationController
   end
 
   def find_all
-    respond_with Merchant.where(name: params[:name]) if params.include?("name")
+    respond_with Merchant.where(merchant_params)
   end
 
   private
