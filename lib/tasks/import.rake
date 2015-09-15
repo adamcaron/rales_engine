@@ -9,7 +9,7 @@ task :import => [:environment] do
   models.each do |m|
     CSV.foreach("#{@path}#{m.pluralize}.csv", headers: true) do |row|
       m = m.camelize.constantize unless m.is_a?(Class)
-      m.create(row.to_h.except("id", "credit_card_expiration"))
+      m.create(row.to_h.except("id", "credit_card_expiration_date"))
     end
   end
 end
