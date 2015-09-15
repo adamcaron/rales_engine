@@ -16,8 +16,8 @@ RSpec.describe Api::V1::MerchantsController, type: :controller do
     Merchant.create(name: "Lemony Snicket")
 
     get :find, format: :json, first_name: Merchant.last.name
-    merchant = JSON.parse(response.body, symbolize_names: true)
+    json_merchant = JSON.parse(response.body, symbolize_names: true)
     expect(response).to have_http_status(:success)
-    expect(Merchant[:name]).to eq("Lemony Snicket")
+    expect(json_merchant[:name]).to eq("Lemony Snicket")
   end
 end
