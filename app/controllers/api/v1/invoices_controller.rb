@@ -6,15 +6,7 @@ class Api::V1::InvoicesController < ApplicationController
   end
 
   def find
-    if params.include?("status")
-      respond_with Invoice.find_by(status: params[:status])
-    elsif params.include?("customer_id")
-      respond_with Invoice.find_by(customer_id: params[:customer_id])
-    elsif params.include?("merchant_id")
-      respond_with Invoice.find_by(merchant_id: params[:merchant_id])
-    else
-      respond_with Invoice.find_by(id: params[:id])
-    end
+    respond_with Invoice.find_by(invoice_params)
   end
 
   def find_all
@@ -25,5 +17,11 @@ class Api::V1::InvoicesController < ApplicationController
     else params.include?("merchant_id")
       respond_with Invoice.where(merchant_id: params[:merchant_id])
     end
+  end
+
+  private
+
+  def invoice_params
+    params.permit(:id, :status, :customer_id, :merchant_id)
   end
 end

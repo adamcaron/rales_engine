@@ -15,4 +15,14 @@ RSpec.describe Api::V1::InvoicesController, type: :controller do
     expect(invoice[:customer_id]).to eq(customer.id)
     expect(invoice[:merchant_id]).to eq(merchant.id)
   end
+
+  scenario "#find" do
+    customer = Customer.create(first_name: "Joe", last_name: "Shmo")
+    merchant = Merchant.create(name: "Alfonse Capone")
+    invoice = Invoice.create(status: "shipped", customer_id: customer.id, merchant_id: merchant.id)
+
+    get :find, format: :json, status: Invoice.last.status
+    json_invoice = JSON.parse(response.body, symbolize_names: true)
+    expect(json_invoice[:id]).to eq(invoice.id)
+  end
 end
