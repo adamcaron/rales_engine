@@ -51,4 +51,25 @@ RSpec.describe Api::V1::InvoicesController, type: :controller do
     expect(json_invoices.first[:status]).to eq("shipped")
     expect(json_invoices.last[:status]).to eq("shipped")
   end
+
+  scenario "#random" do
+    customer = Customer.create(first_name: "Joe", last_name: "Shmo")
+    merchant = Merchant.create(name: "Alfonse Capone")
+    900.times { Invoice.create(status: "shipped", customer_id: customer.id, merchant_id: merchant.id) }
+
+    get :random, format: :json
+    json_invoice1 = JSON.parse(response.body, symbolize_names: true)
+    expect(response).to have_http_status(:success)
+
+    get :random, format: :json
+    json_invoice2 = JSON.parse(response.body, symbolize_names: true)
+    expect(response).to have_http_status(:success)
+    expect(json_invoice2[:id]).to_not eq(json_invoice1[:id])
+
+    get :random, format: :json
+    json_invoice3 = JSON.parse(response.body, symbolize_names: true)
+    expect(response).to have_http_status(:success)
+    expect(json_invoice3[:id]).to_not eq(json_invoice1[:id])
+    expect(json_invoice3[:id]).to_not eq(json_invoice2[:id])
+  end
 end
