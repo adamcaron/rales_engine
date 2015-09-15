@@ -2,7 +2,6 @@ require 'simplecov'
 SimpleCov.start 'rails'
 
 RSpec.configure do |config|
-
   require 'database_cleaner'
   config.before(:suite) do
     DatabaseCleaner.clean_with(:truncation)

@@ -6,24 +6,21 @@ class Api::V1::InvoicesController < ApplicationController
   end
 
   def find
-    if params.include?("status")
-      respond_with Invoice.find_by(status: params[:status])
-    elsif params.include?("customer_id")
-      respond_with Invoice.find_by(customer_id: params[:customer_id])
-    elsif params.include?("merchant_id")
-      respond_with Invoice.find_by(merchant_id: params[:merchant_id])
-    else
-      respond_with Invoice.find_by(id: params[:id])
-    end
+    respond_with Invoice.find_by(invoice_params)
   end
 
   def find_all
-    if params.include?("status")
-      respond_with Invoice.where(status: params[:status])
-    elsif params.include?("customer_id")
-      respond_with Invoice.where(customer_id: params[:customer_id])
-    else params.include?("merchant_id")
-      respond_with Invoice.where(merchant_id: params[:merchant_id])
-    end
+    respond_with Invoice.where(invoice_params)
+  end
+
+  def random
+    invoice = Invoice.all.sample
+    respond_with Invoice.find_by(id: invoice.id)
+  end
+
+  private
+
+  def invoice_params
+    params.permit(:id, :status, :customer_id, :merchant_id)
   end
 end
