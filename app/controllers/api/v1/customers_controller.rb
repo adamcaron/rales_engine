@@ -14,4 +14,12 @@ class Api::V1::CustomersController < ApplicationController
       respond_with Customer.find_by(id: params[:id])
     end
   end
+
+  def find_all
+    if params.include?("first_name")
+      respond_with Customer.where(first_name: params[:first_name])
+    else params.inlude?("last_name")
+      respond_with Customer.where(last_name: params[:last_name])
+    end
+  end
 end
