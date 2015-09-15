@@ -1,6 +1,14 @@
 Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
+
+      get "customers/random", to: "customers#random"
+      get "merchants/random", to: "merchants#random"
+      get "invoices/random", to: "invoices#random"
+      get "items/random", to: "items#random"
+      get "invoice_items/random", to: "invoice_items#random"
+      get "transactions/random", to: "transactions#random"
+
       resources :customers,     except: [:new, :edit]
       resources :merchants,     except: [:new, :edit]
       resources :invoices,      except: [:new, :edit]

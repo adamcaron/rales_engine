@@ -22,4 +22,9 @@ class Api::V1::CustomersController < ApplicationController
       respond_with Customer.where(last_name: params[:last_name])
     end
   end
+
+  def random
+    customer = Customer.all.sample
+    respond_with Customer.find_by(id: customer.id)
+  end
 end
