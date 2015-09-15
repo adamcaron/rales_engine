@@ -14,16 +14,16 @@ RSpec.describe Api::V1::CustomersController, type: :controller do
   end
 
   scenario "#find" do
-    Customer.create(first_name: "John", last_name: "Doe")
+    customer = Customer.create(first_name: "John", last_name: "Doe")
 
     get :find, format: :json, first_name: Customer.last.first_name
     json_customer = JSON.parse(response.body, symbolize_names: true)
     expect(response).to have_http_status(:success)
-    expect(json_customer[:first_name]).to eq("John")
+    expect(json_customer[:id]).to eq(customer.id)
 
     get :find, format: :json, last_name: Customer.last.last_name
     json_customer = JSON.parse(response.body, symbolize_names: true)
     expect(response).to have_http_status(:success)
-    expect(json_customer[:last_name]).to eq("Doe")
+    expect(json_customer[:id]).to eq(customer.id)
   end
 end
