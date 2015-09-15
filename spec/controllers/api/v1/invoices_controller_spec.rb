@@ -19,7 +19,7 @@ RSpec.describe Api::V1::InvoicesController, type: :controller do
   scenario "#find" do
     customer = Customer.create(first_name: "Joe", last_name: "Shmo")
     merchant = Merchant.create(name: "Alfonse Capone")
-    invoice = Invoice.create(status: "shipped", customer_id: customer.id, merchant_id: merchant.id)
+    invoice =  Invoice.create(status: "shipped", customer_id: customer.id, merchant_id: merchant.id)
 
     get :find, format: :json, status: invoice.status
     json_invoice = JSON.parse(response.body, symbolize_names: true)
