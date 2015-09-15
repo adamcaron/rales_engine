@@ -13,6 +13,11 @@ class Api::V1::TransactionsController < ApplicationController
     respond_with Transaction.where(transaction_params)
   end
 
+  def random
+    transaction = Transaction.all.sample
+    respond_with Transaction.find_by(id: transaction.id)
+  end
+
   private
 
   def transaction_params
