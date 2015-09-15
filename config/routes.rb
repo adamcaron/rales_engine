@@ -1,20 +1,14 @@
 Rails.application.routes.draw do
-  namespace :api do
+  namespace :api, defaults: { format: :json } do
     namespace :v1 do
 
-      get "customers/random", to: "customers#random"
-      get "merchants/random", to: "merchants#random"
-      get "invoices/random", to: "invoices#random"
-      get "items/random", to: "items#random"
+      get "customers/random",     to: "customers#random"
+      get "merchants/random",     to: "merchants#random"
+      get "invoices/random",      to: "invoices#random"
+      get "items/random",         to: "items#random"
       get "invoice_items/random", to: "invoice_items#random"
-      get "transactions/random", to: "transactions#random"
+      get "transactions/random",  to: "transactions#random"
 
-      resources :customers,     except: [:new, :edit]
-      resources :merchants,     except: [:new, :edit]
-      resources :invoices,      except: [:new, :edit]
-      resources :items,         except: [:new, :edit]
-      resources :invoice_items, except: [:new, :edit]
-      resources :transactions,  except: [:new, :edit]
 
       get "customers/find", to: "customers#find"
       get "merchants/find", to: "merchants#find"
@@ -29,6 +23,13 @@ Rails.application.routes.draw do
       get "items/find_all", to: "items#find_all"
       get "invoice_items/find_all", to: "invoice_items#find_all"
       get "transactions/find_all", to: "transactions#find_all"
+
+      resources :customers,     except: [:new, :edit]
+      resources :merchants,     except: [:new, :edit]
+      resources :invoices,      except: [:new, :edit]
+      resources :items,         except: [:new, :edit]
+      resources :invoice_items, except: [:new, :edit]
+      resources :transactions,  except: [:new, :edit]
     end
   end
 end
