@@ -45,10 +45,10 @@ RSpec.describe Api::V1::InvoicesController, type: :controller do
     invoice3 = Invoice.create(status: "pending", customer_id: customer.id, merchant_id: merchant.id)
 
     get :find_all, format: :json, status: "shipped"
-    json_invoice = JSON.parse(response.body, symbolize_names: true)
+    json_invoices = JSON.parse(response.body, symbolize_names: true)
     expect(response).to have_http_status(:success)
-    expect(json_invoice.count).to eq(2)
-    expect(json_invoice.first[:status]).to eq("shipped")
-    expect(json_invoice.last[:status]).to eq("shipped")
+    expect(json_invoices.count).to eq(2)
+    expect(json_invoices.first[:status]).to eq("shipped")
+    expect(json_invoices.last[:status]).to eq("shipped")
   end
 end
