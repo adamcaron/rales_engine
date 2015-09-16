@@ -2,6 +2,10 @@ Rails.application.routes.draw do
   namespace :api, defaults: { format: :json } do
     namespace :v1 do
 
+      # business intelligence endpoints
+      get "merchants/most_revenue",     to: "merchants#most_revenue"
+
+      # relationships endpoints
       get "customers/:id/transactions", to: "customers#transactions"
       get "customers/:id/invoices",     to: "customers#invoices"
 
@@ -22,6 +26,7 @@ Rails.application.routes.draw do
       get "merchants/:id/invoices",     to: "merchants#invoices"
       get "merchants/:id/items",        to: "merchants#items"
 
+      # record endpoints
       get "customers/find",             to: "customers#find"
       get "merchants/find",             to: "merchants#find"
       get "invoices/find",              to: "invoices#find"

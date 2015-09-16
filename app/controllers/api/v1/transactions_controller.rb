@@ -1,6 +1,10 @@
 class Api::V1::TransactionsController < ApplicationController
   respond_to :json
 
+  def index
+    respond_with Transaction.all
+  end
+
   def show
     respond_with Transaction.find_by(id: params[:id])
   end
@@ -26,6 +30,6 @@ class Api::V1::TransactionsController < ApplicationController
   private
 
   def transaction_params
-    params.permit(:credit_card_number, :result, :invoice_id)
+    params.permit(:id, :credit_card_number, :result, :invoice_id, :created_at, :updated_at)
   end
 end

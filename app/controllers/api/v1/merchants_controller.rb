@@ -1,6 +1,10 @@
 class Api::V1::MerchantsController < ApplicationController
   respond_to :json
 
+  def index
+    respond_with Merchant.all
+  end
+
   def show
     respond_with Merchant.find_by(id: params[:id])
   end
@@ -26,9 +30,17 @@ class Api::V1::MerchantsController < ApplicationController
     respond_with Invoice.where(merchant_id: params[:id])
   end
 
+  def most_revenue
+    # binding.pry
+    # params[:quantity]
+    respond_with Merchant.all.sort_by { |merchant| merchant.revenue }.reverse.take(params[:quantity])
+    # respond_with Merchant
+    # .take(params[:quantity])
+  end
+
   private
 
   def merchant_params
-    params.permit(:id, :name)
+    params.permit(:id, :name, :created_at, :updated_at)
   end
 end

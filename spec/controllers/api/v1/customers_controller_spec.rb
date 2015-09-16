@@ -64,7 +64,7 @@ RSpec.describe Api::V1::CustomersController, type: :controller do
 
   scenario "#invoices" do
     customer = Customer.create(first_name: "Joe", last_name: "Shmo")
-    merchant = Merchant.create(name: "Alfonse Capone")
+    merchant = Merchant.create(name: "Alphonse Capone")
     invoice1 = Invoice.create(status: "shipped", customer_id: customer.id, merchant_id: merchant.id)
     invoice2 = Invoice.create(status: "shipped", customer_id: customer.id, merchant_id: merchant.id)
     invoice3 = Invoice.create(status: "pending", customer_id: customer.id, merchant_id: merchant.id)
@@ -82,7 +82,7 @@ RSpec.describe Api::V1::CustomersController, type: :controller do
 
   scenario "#transactions" do
     customer     = Customer.create(first_name: "Joe", last_name: "Shmo")
-    merchant     = Merchant.create(name: "Alfonse Capone")
+    merchant     = Merchant.create(name: "Alphonse Capone")
     invoice      = Invoice.create(status: "shipped", customer_id: customer.id, merchant_id: merchant.id)
     transaction1 = Transaction.create(credit_card_number: "4654405418249632", result: "success", invoice_id: invoice.id)
     transaction2 = Transaction.create(credit_card_number: "4844518708741275", result: "success", invoice_id: invoice.id)

@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Api::V1::ItemsController, type: :controller do
   scenario "#show" do
-    merchant = Merchant.create(name: "Alfonse Capone")
+    merchant = Merchant.create(name: "Alphonse Capone")
     Item.create(name: "Thing", description: "Awesome", unit_price: "100000.00", merchant_id: merchant.id)
 
     get :show, format: :json, id: Item.first.id
@@ -17,7 +17,7 @@ RSpec.describe Api::V1::ItemsController, type: :controller do
   end
 
   scenario "#find" do
-    merchant = Merchant.create(name: "Alfonse Capone")
+    merchant = Merchant.create(name: "Alphonse Capone")
     item = Item.create(name: "Thing", description: "Awesome", unit_price: "100000.00", merchant_id: merchant.id)
 
     get :find, format: :json, name: item.name
@@ -38,7 +38,7 @@ RSpec.describe Api::V1::ItemsController, type: :controller do
   end
 
   scenario "#find_all" do
-    merchant = Merchant.create(name: "Alfonse Capone")
+    merchant = Merchant.create(name: "Alphonse Capone")
     item1 = Item.create(name: "Thing", description: "Awesome", unit_price: "4500.00", merchant_id: merchant.id)
     item2 = Item.create(name: "Thing", description: "Awesome", unit_price: "4500.00", merchant_id: merchant.id)
     item3 = Item.create(name: "Thing", description: "Awesome", unit_price: "100000.00", merchant_id: merchant.id)
@@ -52,7 +52,7 @@ RSpec.describe Api::V1::ItemsController, type: :controller do
   end
 
   scenario "#random" do
-    merchant = Merchant.create(name: "Alfonse Capone")
+    merchant = Merchant.create(name: "Alphonse Capone")
     900.times { Item.create(name: "Thing", description: "Awesome", unit_price: "4500.00", merchant_id: merchant.id) }
 
     get :random, format: :json
@@ -73,7 +73,7 @@ RSpec.describe Api::V1::ItemsController, type: :controller do
 
   scenario "#invoice_items" do
     customer      = Customer.create(first_name: "Joe", last_name: "Shmo")
-    merchant      = Merchant.create(name: "Alfonse Capone")
+    merchant      = Merchant.create(name: "Alphonse Capone")
     invoice1      = Invoice.create(status: "shipped", customer_id: customer.id, merchant_id: merchant.id)
     invoice2      = Invoice.create(status: "shipped", customer_id: customer.id, merchant_id: merchant.id)
     invoice3      = Invoice.create(status: "shipped", customer_id: customer.id, merchant_id: merchant.id)
@@ -95,7 +95,7 @@ RSpec.describe Api::V1::ItemsController, type: :controller do
 
   scenario "#merchant" do
     customer = Customer.create(first_name: "Joe", last_name: "Shmo")
-    merchant = Merchant.create(name: "Alfonse Capone")
+    merchant = Merchant.create(name: "Alphonse Capone")
     invoice  = Invoice.create(status: "shipped", customer_id: customer.id, merchant_id: merchant.id)
     item     = Item.create(name: "Thing", description: "Awesome", unit_price: "100000.00", merchant_id: merchant.id)
 
