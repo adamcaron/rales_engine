@@ -92,4 +92,18 @@ RSpec.describe Api::V1::ItemsController, type: :controller do
       expect(invoice_item[:item_id]).to eq(item.id)
     end
   end
+
+  scenario "#merchant" do
+    customer = Customer.create(first_name: "Joe", last_name: "Shmo")
+    merchant = Merchant.create(name: "Alfonse Capone")
+    invoice  = Invoice.create(status: "shipped", customer_id: customer.id, merchant_id: merchant.id)
+    item     = Item.create(name: "Thing", description: "Awesome", unit_price: "100000.00", merchant_id: merchant.id)
+
+    get :merchant, format: :json, id: item.id
+
+    json_merchant = JSON.parse(response.body, symbolize_names: true)
+
+    expect(response).to have_http_status(:success)
+    expect(json_merchant[:id]).to eq(merchant.id)
+  end
 end
