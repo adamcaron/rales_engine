@@ -1,6 +1,19 @@
 require 'rails_helper'
 
 RSpec.describe Api::V1::InvoicesController, type: :controller do
+  scenario "#index" do
+    customer = Customer.create(first_name: "Joe", last_name: "Shmo")
+    merchant = Merchant.create(name: "Alphonse Capone")
+    9.times { Invoice.create(status: "shipped", customer_id: customer.id, merchant_id: merchant.id) }
+
+    get :index, format: :json
+
+    json_invoices = JSON.parse(response.body, symbolize_names: true)
+
+    expect(response).to have_http_status(:success)
+    expect(json_invoices.count).to eq(9)
+  end
+
   scenario "#show" do
     customer = Customer.create(first_name: "Joe", last_name: "Shmo")
     merchant = Merchant.create(name: "Alphonse Capone")

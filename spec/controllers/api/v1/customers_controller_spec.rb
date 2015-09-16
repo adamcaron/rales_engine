@@ -1,16 +1,27 @@
 require 'rails_helper'
 
 RSpec.describe Api::V1::CustomersController, type: :controller do
+  scenario "#index" do
+    9.times { Customer.create(first_name: "John", last_name: "Doe") }
+
+    get :index, format: :json
+
+    json_customers = JSON.parse(response.body, symbolize_names: true)
+
+    expect(response).to have_http_status(:success)
+    expect(json_customers.count).to eq(9)
+  end
+
   scenario "#show" do
     Customer.create(first_name: "John", last_name: "Doe")
 
     get :show, format: :json, id: Customer.first.id
 
-    customer = JSON.parse(response.body, symbolize_names: true)
+    json_customer = JSON.parse(response.body, symbolize_names: true)
 
     expect(response).to have_http_status(:success)
-    expect(customer[:first_name]).to eq("John")
-    expect(customer[:last_name]).to eq("Doe")
+    expect(json_customer[:first_name]).to eq("John")
+    expect(json_customer[:last_name]).to eq("Doe")
   end
 
   scenario "#find" do

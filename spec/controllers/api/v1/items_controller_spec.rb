@@ -1,6 +1,18 @@
 require 'rails_helper'
 
 RSpec.describe Api::V1::ItemsController, type: :controller do
+  scenario "#index" do
+    merchant = Merchant.create(name: "Alphonse Capone")
+    9.times { Item.create(name: "Thing", description: "Awesome", unit_price: "4500.95", merchant_id: merchant.id) }
+
+    get :index, format: :json
+
+    json_items = JSON.parse(response.body, symbolize_names: true)
+
+    expect(response).to have_http_status(:success)
+    expect(json_items.count).to eq(9)
+  end
+
   scenario "#show" do
     merchant = Merchant.create(name: "Alphonse Capone")
     Item.create(name: "Thing", description: "Awesome", unit_price: "99.99", merchant_id: merchant.id)
