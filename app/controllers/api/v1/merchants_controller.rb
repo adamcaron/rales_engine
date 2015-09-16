@@ -40,6 +40,10 @@ class Api::V1::MerchantsController < ApplicationController
     respond_with Merchant.all.sort_by { |merchant| merchant.items_sold }.reverse.take(top_sellers)
   end
 
+  def revenue
+    respond_with revenue: Merchant.all.inject(0) { |total, merchant| total + merchant.revenue(params[:date]) }
+  end
+
   private
 
   def merchant_params
