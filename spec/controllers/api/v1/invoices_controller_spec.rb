@@ -72,4 +72,23 @@ RSpec.describe Api::V1::InvoicesController, type: :controller do
     expect(json_invoice3[:id]).to_not eq(json_invoice1[:id])
     expect(json_invoice3[:id]).to_not eq(json_invoice2[:id])
   end
+
+  scenario "#transactions" do
+    customer     = Customer.create(first_name: "Joe", last_name: "Shmo")
+    merchant     = Merchant.create(name: "Alfonse Capone")
+    invoice      = Invoice.create(status: "shipped", customer_id: customer.id, merchant_id: merchant.id)
+    transaction1 = Transaction.create(credit_card_number: "4654405418249632", result: "success", invoice_id: invoice.id)
+    transaction2 = Transaction.create(credit_card_number: "4654405418249632", result: "success", invoice_id: invoice.id)
+    transaction3 = Transaction.create(credit_card_number: "4654405418249632", result: "failed", invoice_id: invoice.id)
+
+    get :transactions, format: :json, id: invoice.id
+
+    json_transactions = JSON.parse(response.body, symbolize_names: true)
+
+    expect(response).to have_http_status(:success)
+    expect(json_transactions.count).to eq(3)
+    json_transactions.each do |transaction|
+      expect(transaction[:invoice_id]).to eq(invoice.id)
+    end
+  end
 end
