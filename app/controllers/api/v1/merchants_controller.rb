@@ -31,11 +31,7 @@ class Api::V1::MerchantsController < ApplicationController
   end
 
   def most_revenue
-    # binding.pry
-    # params[:quantity]
     respond_with Merchant.all.sort_by { |merchant| merchant.revenue }.reverse.take(params[:quantity])
-    # respond_with Merchant
-    # .take(params[:quantity])
   end
 
   private
