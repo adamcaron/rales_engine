@@ -70,4 +70,26 @@ RSpec.describe Api::V1::ItemsController, type: :controller do
     expect(json_item3[:id]).to_not eq(json_item1[:id])
     expect(json_item3[:id]).to_not eq(json_item2[:id])
   end
+
+  scenario "#invoice_items" do
+    customer      = Customer.create(first_name: "Joe", last_name: "Shmo")
+    merchant      = Merchant.create(name: "Alfonse Capone")
+    invoice1      = Invoice.create(status: "shipped", customer_id: customer.id, merchant_id: merchant.id)
+    invoice2      = Invoice.create(status: "shipped", customer_id: customer.id, merchant_id: merchant.id)
+    invoice3      = Invoice.create(status: "shipped", customer_id: customer.id, merchant_id: merchant.id)
+    item          = Item.create(name: "Thing", description: "Awesome", unit_price: "100000.00", merchant_id: merchant.id)
+    invoice_item1 = InvoiceItem.create(quantity: 17, unit_price: "100000.00", item_id: item.id, invoice_id: invoice1.id)
+    invoice_item2 = InvoiceItem.create(quantity: 17, unit_price: "100000.00", item_id: item.id, invoice_id: invoice2.id)
+    invoice_item3 = InvoiceItem.create(quantity: 17, unit_price: "100000.00", item_id: item.id, invoice_id: invoice3.id)
+
+    get :invoice_items, format: :json, id: item.id
+
+    json_invoice_items = JSON.parse(response.body, symbolize_names: true)
+
+    expect(response).to have_http_status(:success)
+    expect(json_invoice_items.count).to eq(3)
+    json_invoice_items.each do |invoice_item|
+      expect(invoice_item[:item_id]).to eq(item.id)
+    end
+  end
 end
