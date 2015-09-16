@@ -2,6 +2,8 @@ Rails.application.routes.draw do
   namespace :api, defaults: { format: :json } do
     namespace :v1 do
 
+      get "merchants/:id/items",    to: "merchants#items"
+
       get "customers/find",         to: "customers#find"
       get "merchants/find",         to: "merchants#find"
       get "invoices/find",          to: "invoices#find"

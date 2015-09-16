@@ -52,4 +52,21 @@ RSpec.describe Api::V1::MerchantsController, type: :controller do
     expect(json_merchant3[:id]).to_not eq(json_merchant1[:id])
     expect(json_merchant3[:id]).to_not eq(json_merchant2[:id])
   end
+
+  scenario "#items" do
+    merchant = Merchant.create(name: "Lemony Snicket")
+    item1    = Item.create(name: "Thing", description: "Awesome", unit_price: "4500.00", merchant_id: merchant.id)
+    item2    = Item.create(name: "Thing", description: "Awesome", unit_price: "4500.00", merchant_id: merchant.id)
+    item3    = Item.create(name: "Thing", description: "Awesome", unit_price: "100000.00", merchant_id: merchant.id)
+
+    get :items, format: :json, id: merchant.id
+
+    json_items = JSON.parse(response.body, symbolize_names: true)
+
+    expect(response).to have_http_status(:success)
+    expect(json_items.count).to eq(3)
+    json_items.each do |item|
+      expect(item[:merchant_id]).to eq(merchant.id)
+    end
+  end
 end
