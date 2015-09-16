@@ -20,6 +20,5 @@ group :development, :test do
   gem 'awesome_print'
   gem 'responders'
   gem 'web-console', '~> 2.0'
-  gem "factory_girl_rails", "~> 4.0"
 end
 

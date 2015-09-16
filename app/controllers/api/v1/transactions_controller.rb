@@ -18,6 +18,11 @@ class Api::V1::TransactionsController < ApplicationController
     respond_with Transaction.find_by(id: transaction.id)
   end
 
+  def invoice
+    invoice_id = Transaction.find_by(id: params[:id]).invoice_id
+    respond_with Invoice.find_by(id: invoice_id)
+  end
+
   private
 
   def transaction_params
