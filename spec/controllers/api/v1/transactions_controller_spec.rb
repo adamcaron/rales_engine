@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe Api::V1::TransactionsController, type: :controller do
   scenario "#show" do
     customer    = Customer.create(first_name: "Joe", last_name: "Shmo")
-    merchant    = Merchant.create(name: "Alfonse Capone")
+    merchant    = Merchant.create(name: "Alphonse Capone")
     invoice     = Invoice.create(status: "shipped", customer_id: customer.id, merchant_id: merchant.id)
     transaction = Transaction.create(credit_card_number: "4654405418249632", result: "success", invoice_id: invoice.id)
 
@@ -19,7 +19,7 @@ RSpec.describe Api::V1::TransactionsController, type: :controller do
 
   scenario "#find" do
     customer    = Customer.create(first_name: "Joe", last_name: "Shmo")
-    merchant    = Merchant.create(name: "Alfonse Capone")
+    merchant    = Merchant.create(name: "Alphonse Capone")
     invoice     = Invoice.create(status: "shipped", customer_id: customer.id, merchant_id: merchant.id)
     transaction = Transaction.create(credit_card_number: "4654405418249632", result: "success", invoice_id: invoice.id)
 
@@ -38,7 +38,7 @@ RSpec.describe Api::V1::TransactionsController, type: :controller do
 
   scenario "#find_all" do
     customer     = Customer.create(first_name: "Joe", last_name: "Shmo")
-    merchant     = Merchant.create(name: "Alfonse Capone")
+    merchant     = Merchant.create(name: "Alphonse Capone")
     invoice      = Invoice.create(status: "shipped", customer_id: customer.id, merchant_id: merchant.id)
     transaction1 = Transaction.create(credit_card_number: "4654405418249632", result: "success", invoice_id: invoice.id)
     transaction2 = Transaction.create(credit_card_number: "4654405418249632", result: "success", invoice_id: invoice.id)
@@ -54,7 +54,7 @@ RSpec.describe Api::V1::TransactionsController, type: :controller do
 
   scenario "#random" do
     customer     = Customer.create(first_name: "Joe", last_name: "Shmo")
-    merchant     = Merchant.create(name: "Alfonse Capone")
+    merchant     = Merchant.create(name: "Alphonse Capone")
     invoice      = Invoice.create(status: "shipped", customer_id: customer.id, merchant_id: merchant.id)
     900.times { Transaction.create(credit_card_number: "4654405418249632", result: "success", invoice_id: invoice.id) }
 
@@ -76,7 +76,7 @@ RSpec.describe Api::V1::TransactionsController, type: :controller do
 
   scenario "#invoice" do
     customer    = Customer.create(first_name: "Joe", last_name: "Shmo")
-    merchant    = Merchant.create(name: "Alfonse Capone")
+    merchant    = Merchant.create(name: "Alphonse Capone")
     invoice     = Invoice.create(status: "shipped", customer_id: customer.id, merchant_id: merchant.id)
     transaction = Transaction.create(credit_card_number: "4654405418249632", result: "success", invoice_id: invoice.id)
 
