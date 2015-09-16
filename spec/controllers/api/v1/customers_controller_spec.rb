@@ -79,4 +79,29 @@ RSpec.describe Api::V1::CustomersController, type: :controller do
       expect(invoice[:customer_id]).to eq(customer.id)
     end
   end
+
+  scenario "#transactions" do
+    customer     = Customer.create(first_name: "Joe", last_name: "Shmo")
+    merchant     = Merchant.create(name: "Alfonse Capone")
+    invoice      = Invoice.create(status: "shipped", customer_id: customer.id, merchant_id: merchant.id)
+    transaction1 = Transaction.create(credit_card_number: "4654405418249632", result: "success", invoice_id: invoice.id)
+    transaction2 = Transaction.create(credit_card_number: "4844518708741275", result: "success", invoice_id: invoice.id)
+    transaction3 = Transaction.create(credit_card_number: "4214497729954420", result: "failed", invoice_id: invoice.id)
+
+    get :transactions, format: :json, id: customer.id
+
+    json_transactions = JSON.parse(response.body, symbolize_names: true)
+
+    expect(response).to have_http_status(:success)
+    expect(json_transactions.count).to eq(3)
+    expect(json_transactions[0][:credit_card_number]).to eq("4654405418249632")
+    expect(json_transactions[0][:result]).to eq("success")
+    expect(json_transactions[0][:invoice_id]).to eq(invoice.id)
+    expect(json_transactions[1][:credit_card_number]).to eq("4844518708741275")
+    expect(json_transactions[1][:result]).to eq("success")
+    expect(json_transactions[1][:invoice_id]).to eq(invoice.id)
+    expect(json_transactions[2][:credit_card_number]).to eq("4214497729954420")
+    expect(json_transactions[2][:result]).to eq("failed")
+    expect(json_transactions[2][:invoice_id]).to eq(invoice.id)
+  end
 end
