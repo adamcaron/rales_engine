@@ -3,6 +3,7 @@ Rails.application.routes.draw do
     namespace :v1 do
 
       # business intelligence endpoints
+      get "merchants/most_items",       to: "merchants#most_items"
       get "merchants/most_revenue",     to: "merchants#most_revenue"
 
       # relationships endpoints

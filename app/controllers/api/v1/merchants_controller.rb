@@ -31,7 +31,13 @@ class Api::V1::MerchantsController < ApplicationController
   end
 
   def most_revenue
-    respond_with Merchant.all.sort_by { |merchant| merchant.revenue }.reverse.take(params[:quantity])
+    top_earners = params["quantity"].to_i
+    respond_with Merchant.all.sort_by { |merchant| merchant.revenue }.reverse.take(top_earners)
+  end
+
+  def most_items
+    top_sellers = params["quantity"].to_i
+    respond_with Merchant.all.sort_by { |merchant| merchant.items_sold }.reverse.take(top_sellers)
   end
 
   private
