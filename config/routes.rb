@@ -4,6 +4,7 @@ Rails.application.routes.draw do
 
       # business intelligence endpoints
       get "merchants/:id/revenue",      to: "merchants#revenue"
+
       get "merchants/revenue",          to: "merchants#revenue"
       get "merchants/most_items",       to: "merchants#most_items"
       get "merchants/most_revenue",     to: "merchants#most_revenue"
