@@ -181,7 +181,7 @@ RSpec.describe Api::V1::MerchantsController, type: :controller do
     expect(json_merchants[2][:id]).to eq(merchant1.id)
   end
 
-  scenario "#revenue" do
+  scenario "#revenue (total by date)" do
     customer      = Customer.create(first_name: "Joe", last_name: "Shmo")
     merchant1     = Merchant.create(name: "Penny Merchantheimer")
     merchant2     = Merchant.create(name: "Merch Merchanstein")
@@ -203,10 +203,27 @@ RSpec.describe Api::V1::MerchantsController, type: :controller do
     json_revenue = JSON.parse(response.body, symbolize_names: true)
     expect(response).to have_http_status(:success)
     expect(json_revenue).to eq({:revenue=>"300.66"})
+  end
 
-    # get :revenue, format: :json, date: "2012-03-23 02:58:15 UTC"
-    # json_revenue = JSON.parse(response.body, symbolize_names: true)
-    # expect(response).to have_http_status(:success)
-    # expect(json_revenue).to eq({:revenue=>"200.44"})
+  scenario "#revenue (for one merchant)" do
+    customer      = Customer.create(first_name: "Joe", last_name: "Shmo")
+    merchant      = Merchant.create(name: "Merchy McMerchantson")
+    invoice1      = Invoice.create(status: "shipped", customer_id: customer.id, merchant_id: merchant.id)
+    invoice2      = Invoice.create(status: "shipped", customer_id: customer.id, merchant_id: merchant.id)
+    invoice3      = Invoice.create(status: "shipped", customer_id: customer.id, merchant_id: merchant.id)
+    item1         = Item.create(name: "Thing", description: "Awesome", unit_price: "100.22", merchant_id: merchant.id)
+    item2         = Item.create(name: "Thing", description: "Awesome", unit_price: "100.22", merchant_id: merchant.id)
+    item3         = Item.create(name: "Thing", description: "Awesome", unit_price: "100.22", merchant_id: merchant.id)
+    invoice_item1 = InvoiceItem.create(quantity: 1, unit_price: "100.22", item_id: item1.id, invoice_id: invoice1.id)
+    invoice_item2 = InvoiceItem.create(quantity: 1, unit_price: "100.22", item_id: item2.id, invoice_id: invoice2.id)
+    invoice_item3 = InvoiceItem.create(quantity: 1, unit_price: "100.22", item_id: item3.id, invoice_id: invoice3.id)
+    transaction   = Transaction.create(credit_card_number: "4654405418249632", result: "success", invoice_id: invoice1.id)
+    transaction   = Transaction.create(credit_card_number: "4654405418249632", result: "success", invoice_id: invoice2.id)
+    transaction   = Transaction.create(credit_card_number: "4654405418249632", result: "success", invoice_id: invoice3.id)
+
+    get :revenue, format: :json, id: merchant.id
+    json_revenue = JSON.parse(response.body, symbolize_names: true)
+    expect(response).to have_http_status(:success)
+    expect(json_revenue).to eq({:revenue=>"300.66"})
   end
 end
