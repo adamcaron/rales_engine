@@ -41,7 +41,16 @@ class Api::V1::MerchantsController < ApplicationController
   end
 
   def revenue
-    respond_with revenue: Merchant.all.inject(0) { |total, merchant| total + merchant.revenue(params[:date]) }
+    if params[:date]
+      if params[:id]
+        respond_with revenue: Merchant.all.inject(0) { |total, merchant| total + merchant.revenue(params[:date]) }
+      else
+        respond_with total_revenue: Merchant.all.inject(0) { |total, merchant| total + merchant.revenue(params[:date]) }
+      end
+    else
+      # respond_with revenue: Merchant.all.inject(0) { |total, merchant| total + merchant.revenue(params[:date]) }
+      respond_with revenue: Merchant.find_by(merchant_params).revenue
+    end
   end
 
   private
