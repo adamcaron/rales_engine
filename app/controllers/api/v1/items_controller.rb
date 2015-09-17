@@ -31,6 +31,11 @@ class Api::V1::ItemsController < ApplicationController
     respond_with Merchant.find_by(id: merchant_id)
   end
 
+  def most_revenue
+    top_items = params["quantity"].to_i
+    respond_with Item.all.sort_by { |item| item.revenue }.reverse.take(top_items)
+  end
+
   private
 
   def item_params

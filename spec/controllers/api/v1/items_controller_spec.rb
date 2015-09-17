@@ -118,4 +118,44 @@ RSpec.describe Api::V1::ItemsController, type: :controller do
     expect(response).to have_http_status(:success)
     expect(json_merchant[:id]).to eq(merchant.id)
   end
+
+  scenario "#most_revenue" do
+    customer      = Customer.create(first_name: "Joe", last_name: "Shmo")
+    merchant1     = Merchant.create(name: "Penny Merchantheimer")
+    merchant2     = Merchant.create(name: "Merch Merchanstein")
+    merchant3     = Merchant.create(name: "Merchy McMerchantson")
+    invoice1      = Invoice.create(status: "shipped", customer_id: customer.id, merchant_id: merchant1.id)
+    invoice2      = Invoice.create(status: "shipped", customer_id: customer.id, merchant_id: merchant2.id)
+    invoice3      = Invoice.create(status: "shipped", customer_id: customer.id, merchant_id: merchant3.id)
+    item1         = Item.create(name: "Thing", description: "Awesome", unit_price: "100.00", merchant_id: merchant1.id)
+    item2         = Item.create(name: "Thing", description: "Awesome", unit_price: "100.00", merchant_id: merchant2.id)
+    item3         = Item.create(name: "Thing", description: "Awesome", unit_price: "100.00", merchant_id: merchant3.id)
+    invoice_item1 = InvoiceItem.create(quantity: 1, unit_price: "100.00", item_id: item1.id, invoice_id: invoice1.id)
+    invoice_item2 = InvoiceItem.create(quantity: 5, unit_price: "100.00", item_id: item2.id, invoice_id: invoice2.id)
+    invoice_item3 = InvoiceItem.create(quantity: 9, unit_price: "100.00", item_id: item3.id, invoice_id: invoice3.id)
+    transaction   = Transaction.create(credit_card_number: "4654405418249632", result: "success", invoice_id: invoice1.id)
+    transaction   = Transaction.create(credit_card_number: "4654405418249632", result: "success", invoice_id: invoice2.id)
+    transaction   = Transaction.create(credit_card_number: "4654405418249632", result: "success", invoice_id: invoice3.id)
+
+    get :most_revenue, format: :json, quantity: 2
+    json_items = JSON.parse(response.body, symbolize_names: true)
+    expect(response).to have_http_status(:success)
+    expect(json_items.count).to eq(2)
+    expect(json_items.first[:id]).to eq(item3.id)
+    expect(json_items.last[:id]).to eq(item2.id)
+
+    get :most_revenue, format: :json, quantity: 1
+    json_items = JSON.parse(response.body, symbolize_names: true)
+    expect(response).to have_http_status(:success)
+    expect(json_items.count).to eq(1)
+    expect(json_items.first[:id]).to eq(item3.id)
+
+    get :most_revenue, format: :json, quantity: 3
+    json_items = JSON.parse(response.body, symbolize_names: true)
+    expect(response).to have_http_status(:success)
+    expect(json_items.count).to eq(3)
+    expect(json_items[0][:id]).to eq(item3.id)
+    expect(json_items[1][:id]).to eq(item2.id)
+    expect(json_items[2][:id]).to eq(item1.id)
+  end
 end
