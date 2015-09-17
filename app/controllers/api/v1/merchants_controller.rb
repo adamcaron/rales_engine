@@ -42,20 +42,15 @@ class Api::V1::MerchantsController < ApplicationController
 
   def revenue
     if params[:date]
-      if params[:id]
-        respond_with revenue: Merchant.all.inject(0) { |total, merchant| total + merchant.revenue(params[:date]) }
-      else
-        respond_with total_revenue: Merchant.all.inject(0) { |total, merchant| total + merchant.revenue(params[:date]) }
-      end
+      respond_with Merchant.revenue_by_date(params)
     else
-      # respond_with revenue: Merchant.all.inject(0) { |total, merchant| total + merchant.revenue(params[:date]) }
-      respond_with revenue: Merchant.find_by(merchant_params).revenue
+      respond_with Merchant.single_merchant_total_revenue(params)
     end
   end
 
   private
 
   def merchant_params
-    params.permit(:id, :name, :created_at, :updated_at)
+    params.permit(:id, :name, :created_at, :updated_at, :date)
   end
 end
